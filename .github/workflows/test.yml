@@ -1,0 +1,24 @@
+name: Test
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Run tests in each folder
+        run:
+          bash test.sh
