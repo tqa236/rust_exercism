@@ -15,12 +15,11 @@ pub fn annotate(garden: &[&str]) -> Vec<String> {
                 continue;
             }
 
-            // Compter les fleurs adjacentes
             let mut count = 0;
             for di in -1..=1 {
                 for dj in -1..=1 {
                     if di == 0 && dj == 0 {
-                        continue; // Ignorer la case courante
+                        continue;
                     }
                     let ni = i as i32 + di;
                     let nj = j as i32 + dj;
