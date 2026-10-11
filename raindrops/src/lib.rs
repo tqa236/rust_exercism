@@ -3,7 +3,7 @@ pub fn raindrops(n: u32) -> String {
 
     let mut result = String::new();
     for (key, value) in &sounds {
-        if n % key == 0 {
+        if n.is_multiple_of(*key) {
             result.push_str(value)
         }
     }

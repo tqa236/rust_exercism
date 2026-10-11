@@ -6,7 +6,7 @@ pub fn nth(n: u32) -> u32 {
         return 3;
     }
 
-    let mut upper_bound = (n as f64) * (n as f64).ln() * 1.2;
+    let upper_bound = (n as f64) * (n as f64).ln() * 1.2;
     let mut limit = upper_bound as usize;
 
     loop {
@@ -33,6 +33,5 @@ pub fn nth(n: u32) -> u32 {
         }
 
         limit *= 2;
-        upper_bound *= 2.0;
     }
 }

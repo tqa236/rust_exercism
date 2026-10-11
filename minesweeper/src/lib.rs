@@ -10,14 +10,14 @@ pub fn annotate(minefield: &[&str]) -> Vec<String> {
 
     let mut result = vec![vec![' '; cols]; rows];
 
-    for r in 0..rows {
-        for c in 0..cols {
+    for (r, row) in result.iter_mut().enumerate() {
+        for (c, cell) in row.iter_mut().enumerate() {
             if minefield[r].as_bytes()[c] == b'*' {
-                result[r][c] = '*';
+                *cell = '*';
             } else {
                 let count = count_adjacent_mines(minefield, r, c);
                 if count > 0 {
-                    result[r][c] = std::char::from_digit(count, 10).unwrap();
+                    *cell = std::char::from_digit(count, 10).unwrap();
                 }
             }
         }

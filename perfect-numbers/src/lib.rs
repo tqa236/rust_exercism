@@ -10,7 +10,7 @@ pub fn classify(num: u64) -> Option<Classification> {
         return None;
     }
 
-    let sum: u64 = (1..=num / 2).filter(|&i| num % i == 0).sum();
+    let sum: u64 = (1..=num / 2).filter(|&i| num.is_multiple_of(i)).sum();
 
     Some(match sum {
         s if s == num => Classification::Perfect,
