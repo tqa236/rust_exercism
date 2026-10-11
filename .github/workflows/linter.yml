@@ -28,10 +28,28 @@ jobs:
           components: clippy, rustfmt
 
       - name: Check formatting and lint every crate
+        shell: bash
         run: |
-          set -euo pipefail
+          set -uo pipefail
+          failures=()
+
           for manifest in */Cargo.toml; do
-            echo "Checking ${manifest%/Cargo.toml}"
-            cargo fmt --manifest-path "$manifest" -- --check
-            cargo clippy --manifest-path "$manifest" --all-targets -- -D warnings
+            crate="${manifest%/Cargo.toml}"
+            echo "::group::${crate}"
+
+            if ! cargo fmt --manifest-path "$manifest" -- --check; then
+              failures+=("$crate: formatting")
+            fi
+
+            if ! cargo clippy --manifest-path "$manifest" --all-targets -- -D warnings; then
+              failures+=("$crate: Clippy")
+            fi
+
+            echo "::endgroup::"
           done
+
+          if ((${#failures[@]} > 0)); then
+            echo "Lint failures:"
+            printf ' - %s\n' "${failures[@]}"
+            exit 1
+          fi
