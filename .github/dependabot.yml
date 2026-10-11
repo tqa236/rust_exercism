@@ -5,6 +5,8 @@ updates:
       - "/*"
     schedule:
       interval: weekly
+    ignore:
+      - dependency-name: "*"
 
   - package-ecosystem: github-actions
     directory: /
