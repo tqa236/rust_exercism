@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 pub fn raindrops(n: u32) -> String {
     let sounds = vec![(3, "Pling"), (5, "Plang"), (7, "Plong")];
 

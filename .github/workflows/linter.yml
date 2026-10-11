@@ -1,52 +1,37 @@
----
-###########################
-###########################
-## Linter GitHub Actions ##
-###########################
-###########################
-name: Lint Code Base
+name: Lint
 
-#
-# Documentation:
-# https://help.github.com/en/articles/workflow-syntax-for-github-actions
-#
-
-#############################
-# Start the job on all push #
-#############################
 on:
   push:
-    # branches-ignore: [main]
-    # Remove the line above to run when pushing to main
+    branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
-###############
-# Set the Job #
-###############
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
-  build:
-    # Name the Job
-    name: Lint Code Base
-    # Set the agent to run on
-    runs-on: ubuntu-latest
-
-    ##################
-    # Load all steps #
-    ##################
+  lint:
+    name: Format and Clippy
+    runs-on: ubuntu-24.04
     steps:
-      ##########################
-      # Checkout the code base #
-      ##########################
-      - name: Checkout Code
-        uses: actions/checkout@v4.1.1
+      - name: Check out repository
+        uses: actions/checkout@v4
 
-      ################################
-      # Run Linter against code base #
-      ################################
-      - name: Lint Code Base
-        uses: github/super-linter@v5.0.0
-        env:
-          VALIDATE_ALL_CODEBASE: false
-          DEFAULT_BRANCH: main
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set up stable Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+
+      - name: Check formatting and lint every crate
+        run: |
+          set -euo pipefail
+          for manifest in */Cargo.toml; do
+            echo "Checking ${manifest%/Cargo.toml}"
+            cargo fmt --manifest-path "$manifest" -- --check
+            cargo clippy --manifest-path "$manifest" --all-targets -- -D warnings
+          done

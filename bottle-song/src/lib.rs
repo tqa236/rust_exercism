@@ -4,11 +4,11 @@ pub fn recite(start_bottles: u32, take_down: u32) -> String {
     for bottles in (start_bottles - take_down + 1)..=start_bottles {
         let verse = format!(
             "{} green bottle{} hanging on the wall,\n{} green bottle{} hanging on the wall,\nAnd if one green bottle should accidentally fall,\nThere'll be {} green bottle{} hanging on the wall.",
-            number_to_word(bottles, true),  
+            number_to_word(bottles, true),
             if bottles == 1 { "" } else { "s" },
-            number_to_word(bottles, true),  
+            number_to_word(bottles, true),
             if bottles == 1 { "" } else { "s" },
-            number_to_word(bottles - 1, false), 
+            number_to_word(bottles - 1, false),
             if bottles - 1 == 1 { "" } else { "s" }
         );
 

@@ -1,24 +1,29 @@
 name: Test
 
 on:
-  pull_request:
-    branches:
-      - main
   push:
-    branches:
-      - main
+    branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test:
+    name: Test all crates
     runs-on: ubuntu-24.04
     steps:
-      - name: Checkout code
+      - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Setup toolchain
+      - name: Set up stable Rust
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Run tests in each folder
-        run:
-          bash test.sh
+      - name: Run tests in every crate
+        run: bash ./test.sh
