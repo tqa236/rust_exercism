@@ -8,5 +8,5 @@ big-primes = []
 
 [dependencies]
 rand = "0.8"
-num-bigint = "0.4"
+num-bigint = "0.5"
 num-traits = "0.2"
